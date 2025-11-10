@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision | Image Recognition</title>
+    
+    <!-- Resource hints for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Critical CSS inline -->
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #10b981;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #94a3b8;
+            --border-radius: 16px;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #c7d2fe, #a5b4fc, #93c5fd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .loader {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+            gap: 15px;
+        }
+    </style>
+    
+    <!-- Non-critical CSS deferred -->
+    <link rel="stylesheet" href="css/styles.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="css/styles.css"></noscript>
+    
+    <!-- Google Fonts with display=swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Font Awesome - load asynchronously with reduced icon subset -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+    
+    <!-- TensorFlow.js library - defer loading -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs" defer></script>
+    
+    <!-- MobileNet model - defer loading -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="app-header">
+            <h1><i class="fas fa-brain"></i>AI Vision </h1>
+            <p class="tagline">Advanced image recognition powered by TensorFlow</p>
+            <!-- <div class="premium-badge">
+                <i class="fas fa-crown"></i> Premium
+            </div> -->
+        </div>
+        
+        <div class="upload-section">
+            <label for="image-upload" class="upload-label" id="upload-area">
+                <div class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> Select Image</div>
+                <div class="drag-hint">or drop image here</div>
+            </label>
+            <input type="file" id="image-upload" accept="image/*" hidden>
+            <div class="divider">
+               
+            </div>
+        </div>
+        
+        <div class="preview-section">
+            <div class="image-preview">
+                <label for="image-upload" class="preview-container">
+                    <div class="preview-placeholder" id="preview-placeholder">
+                        <i class="fas fa-image"></i>
+                        <p>Click to select an image</p>
+                        <span class="hint-text">or use the buttons above</span>
+                    </div>
+                </label>
+                <img id="preview-image" src="#" alt="Preview" style="display: none;">
+                <canvas id="camera-canvas" style="display: none;"></canvas>
+                <video id="camera-view" autoplay playsinline style="display: none;"></video>
+            </div>
+            <div class="action-buttons">
+                <button id="analyze-btn" class="analyze-btn" disabled><i class="fas fa-magic"></i> Analyze Image</button>
+                <button id="capture-btn" class="capture-btn" style="display: none;"><i class="fas fa-camera"></i> Capture</button>
+                <button id="switch-btn" class="switch-btn" style="display: none;"><i class="fas fa-sync-alt"></i> Switch Camera</button>
+            </div>
+        </div>
+        
+        <div class="results-section">
+            <h2><i class="fas fa-list-ul"></i> Recognition Results</h2>
+            <div id="results" class="results">
+                <p class="placeholder">Your analysis results will appear here</p>
+            </div>
+            <div class="loader" id="loader" style="display: none;">
+                <div class="ios-loader">
+                    <div class="ios-spinner"></div>
+                </div>
+                <p class="loader-text">Analyzing with AI Vision Pro...</p>
+            </div>
+
+            <!-- Info card: details about the top prediction -->
+            <div id="info-card" class="info-card" style="display: none;">
+                <div class="info-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>About</h3>
+                </div>
+                <div class="info-content">
+                    <p class="placeholder">Details about the top result will appear here</p>
+                </div>
+            </div>
+            
+            <div class="share-section">
+                <div class="share-header">
+                    <i class="fas fa-share-alt"></i>
+                    <h3>Share Results</h3>
+                </div>
+                <div class="share-buttons">
+                    <button class="share-btn" title="Share on Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </button>
+                    <button class="share-btn" title="Share on Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </button>
+                    <button class="share-btn" title="Copy to Clipboard">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                    <button class="share-btn" title="Download Results">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+</div>
+        
+        <footer class="app-footer">
+            <p><i class="far fa-copyrigh t"></i> 2025 AI Vision Pro | Developed by @Sahil</p>
+            <div class="footer-links">
+                <a href="#">Privacy</a> • 
+                <a href="#">Terms</a> • 
+                <a href="#">Support</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Floating Q&A box (appears after info card is shown) -->
+    <div id="qa-box" class="qa-box" style="display:none;">
+        <div class="qa-header">
+            <i class="fas fa-comments"></i>
+            <span>Ask about this image</span>
+        </div>
+        <div id="qa-output" class="qa-output" aria-live="polite"></div>
+        <div class="qa-input-row">
+            <textarea id="qa-input" rows="1" placeholder="Ask a question about the detected object... (Shift+Enter for newline)" aria-label="Ask about the image"></textarea>
+            <button id="qa-send" class="qa-send" title="Send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.18.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@4.18.0"></script>
+    <script>
+      // Point the Q&A client to the local backend (update when deploying)
+window.TEXT_MODEL_ENDPOINT = 'http://127.0.0.1:8788/qa';
+      // Optional: hint model name to backend if supported
+      window.TEXT_MODEL_NAME = 'llama-3.3-70b-versatile';
+    </script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>

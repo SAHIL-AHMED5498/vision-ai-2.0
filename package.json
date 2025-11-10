@@ -1,0 +1,18 @@
+{
+  "name": "image-recog",
+  "version": "1.0.0",
+  "description": "A fully functional web-based application for image recognition that works directly in your browser. This application uses TensorFlow.js and the MobileNet model to recognize objects in images.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:server": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2"
+  },
+  "author": "",
+  "license": "ISC"
+}
