@@ -234,9 +234,54 @@ function autoResizeQA() {
     qaInput.style.height = Math.min(qaInput.scrollHeight, 140) + 'px';
 }
 
+function setCollapsed(collapsed) {
+    if (!qaBox) return;
+    qaBox.classList.toggle('collapsed', !!collapsed);
+    const t = document.getElementById('qa-toggle');
+    if (t) {
+        t.setAttribute('aria-expanded', String(!collapsed));
+        const icon = t.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fa-chevron-down', 'fa-chevron-up');
+            icon.classList.add(collapsed ? 'fa-chevron-up' : 'fa-chevron-down');
+        }
+    }
+}
+
+function toggleCollapse() {
+    if (!qaBox) return;
+    setCollapsed(!qaBox.classList.contains('collapsed'));
+}
+
 function wireQA() {
     if (!qaInput || !qaSend) return;
     autoResizeQA();
+
+    // Collapse/expand handlers
+    const qaHeader = document.querySelector('.qa-header');
+    const qaToggle = document.getElementById('qa-toggle');
+    if (qaHeader) {
+        qaHeader.addEventListener('click', (e) => {
+            if (e.target && e.target.closest && e.target.closest('#qa-toggle')) return;
+            toggleCollapse();
+        });
+        qaHeader.addEventListener('keydown', (e) => {
+            if ((e.key === 'Enter' || e.key === ' ') && !e.shiftKey) {
+                e.preventDefault();
+                toggleCollapse();
+            }
+        });
+    }
+    if (qaToggle) {
+        qaToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleCollapse();
+        });
+    }
+
+    // Default to expanded when shown
+    setCollapsed(false);
+
     const submit = async () => {
         const q = qaInput.value.trim();
         if (!q) return;

@@ -168,9 +168,14 @@
 
     <!-- Floating Q&A box (appears after info card is shown) -->
     <div id="qa-box" class="qa-box" style="display:none;">
-        <div class="qa-header">
-            <i class="fas fa-comments"></i>
-            <span>Ask about this image</span>
+        <div class="qa-header" role="button" tabindex="0" aria-controls="qa-box">
+            <span style="display:flex;align-items:center;gap:8px;">
+                <i class="fas fa-comments"></i>
+                <span>Ask about this image</span>
+            </span>
+            <button id="qa-toggle" class="qa-toggle" aria-label="Collapse chat" aria-expanded="true" title="Collapse">
+                <i class="fas fa-chevron-down"></i>
+            </button>
         </div>
         <div id="qa-output" class="qa-output" aria-live="polite"></div>
         <div class="qa-input-row">

@@ -1058,6 +1058,8 @@ body {
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 8px;
+    justify-content: space-between;
+    cursor: pointer;
 }
 
 .qa-header i { color: var(--primary-color); }
@@ -1118,6 +1120,28 @@ body {
 }
 
 .qa-send:hover { filter: brightness(1.05); }
+
+/* Q&A collapse controls */
+.qa-toggle {
+    background: transparent;
+    border: none;
+    color: var(--dark-color);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+}
+.qa-toggle:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.qa-box.collapsed {
+    max-height: none;
+    padding-bottom: 8px;
+}
+.qa-box.collapsed .qa-output,
+.qa-box.collapsed .qa-input-row {
+    display: none;
+}
 
 /* Premium features section */
 .premium-features {
