@@ -1,42 +1,46 @@
 # Image Recognition Web App
 
-A fully functional web-based application for image recognition that works directly in your browser. This application uses TensorFlow.js and the MobileNet model to recognize objects in images.
-
-## Live Demo
-
-This application is hosted on GitHub Pages and can be accessed at: 
+A privacy-friendly, browser-based image recognition application powered by TensorFlow.js and the MobileNet model. An optional Q&A assistant can provide concise answers about the detected object via a lightweight Node/Express backend.
 
 ## Features
 
-- Upload images for recognition
-- View recognition results with confidence scores
-- Entirely client-side processing (no server required)
+- Image upload and instant preview
+- On-device classification with MobileNet (no images leave the browser)
+- Top-5 predictions with confidence scores
+- Information panel for the top prediction sourced from Wikipedia, including a "Read more" link when available
+- In-app Q&A about the current image (optional):
+  - Sends the detected label, Wikipedia summary, and recent context to a local backend
+  - Uses a Groq OpenAI-compatible API with guardrails to keep answers on-topic
+- Responsive UI with loading indicators and graceful error handling
+- Performance-conscious loading (resource hints, deferred CSS/fonts, deferred model load)
 
-## Technologies Used
+## Technology Stack
 
-- HTML5
-- CSS3
-- JavaScript (ES6+)
-- TensorFlow.js
-- MobileNet pre-trained model
+- HTML5, CSS3, JavaScript (ES6+)
+- TensorFlow.js with the MobileNet pre-trained model
+- Node.js, Express, node-fetch, cors, dotenv (for the optional Q&A backend)
 
 ## How to Use
 
-1. Open `index.html` in a modern browser (Chrome, Firefox, Edge recommended)
-2. Choose one of the input methods:
-   - Click "Choose Image" to upload an image file
-   - Click "Use Camera" to access your device camera
-3. If using the camera, click "Capture Photo" when ready
-4. Click "Analyze Image" to start the recognition process
-5. View the top 5 predictions with confidence scores
+### Image classification (no backend required)
+1. Open `index.html` in a modern browser (Chrome, Firefox, Edge).
+2. Click "Select Image" and choose an image file.
+3. Click "Analyze Image" to run recognition.
+4. Review the predictions and the information panel.
+
+### Enable the Q&A assistant (optional)
+1. Install dependencies in the project root: `npm install`.
+2. Create `server/.env` from `server/.env.example` and set `GROQ_API_KEY`.
+3. Start the backend: `npm run start:server` (defaults to `http://127.0.0.1:8787`).
+4. In `index.html`, set `window.TEXT_MODEL_ENDPOINT` to `http://127.0.0.1:8787/qa` (or your deployed endpoint).
 
 ## Privacy
 
-All image processing happens directly in your browser. No images are uploaded to any server, making this application privacy-friendly.
+All image recognition runs entirely in your browser. When the Q&A assistant is enabled, only your text questions and minimal context are sent to the backend; images are not uploaded.
 
 ## Browser Compatibility
 
-This application works best in modern browsers that support the Web Camera API. For optimal experience, use the latest versions of Chrome, Firefox, or Edge.
+Works best in modern browsers with WebGL enabled (Chrome, Firefox, Edge).
 
 ## License
 
