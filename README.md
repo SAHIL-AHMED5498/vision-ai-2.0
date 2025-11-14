@@ -1,46 +1,58 @@
 # Image Recognition Web App
 
-A privacy-friendly, browser-based image recognition application powered by TensorFlow.js and the MobileNet model. An optional Q&A assistant can provide concise answers about the detected object via a lightweight Node/Express backend.
+A simple, privacy-friendly image recognition app built with TensorFlow.js and the MobileNet model. It runs completely in the browser, and includes an optional Q&A assistant through a small Node/Express backend.
+
+## Screenshots
+
+### Desktop view
+
+![Image Recognition Web App - Main screen](images/Screenshot%20(185).png)
+
+### Prediction & Q&A panel
+
+![Image Recognition Web App - Predictions and Q&A](images/Screenshot%20(186).png)
 
 ## Features
 
-- Image upload and instant preview
-- On-device classification with MobileNet (no images leave the browser)
-- Top-5 predictions with confidence scores
-- Information panel for the top prediction sourced from Wikipedia, including a "Read more" link when available
-- In-app Q&A about the current image (optional):
-  - Sends the detected label, Wikipedia summary, and recent context to a local backend
-  - Uses a Groq OpenAI-compatible API with guardrails to keep answers on-topic
-- Responsive UI with loading indicators and graceful error handling
-- Performance-conscious loading (resource hints, deferred CSS/fonts, deferred model load)
+- Image upload with instant preview  
+- On-device classification using MobileNet (nothing is uploaded to a server)  
+- Top-5 predictions with confidence scores  
+- Info panel for the top prediction using Wikipedia data, with a link to the full article when available  
+- Optional in-app Q&A:
+  - Sends the detected label and short summary to a local backend
+  - Uses a Groq OpenAI-compatible API with basic guardrails to keep responses focused  
+- Responsive UI with loading states and error handling  
+- Optimized loading for better performance (resource hints, deferred assets, delayed model load)
 
 ## Technology Stack
 
-- HTML5, CSS3, JavaScript (ES6+)
-- TensorFlow.js with the MobileNet pre-trained model
-- Node.js, Express, node-fetch, cors, dotenv (for the optional Q&A backend)
+- HTML5, CSS3, JavaScript (ES6+)  
+- TensorFlow.js + MobileNet  
+- Node.js, Express, node-fetch, cors, dotenv (for the optional backend)
 
 ## How to Use
 
-### Image classification (no backend required)
-1. Open `index.html` in a modern browser (Chrome, Firefox, Edge).
-2. Click "Select Image" and choose an image file.
-3. Click "Analyze Image" to run recognition.
-4. Review the predictions and the information panel.
+### Image classification (no backend needed)
 
-### Enable the Q&A assistant (optional)
-1. Install dependencies in the project root: `npm install`.
-2. Create `server/.env` from `server/.env.example` and set `GROQ_API_KEY`.
-3. Start the backend: `npm run start:server` (defaults to `http://127.0.0.1:8787`).
-4. In `index.html`, set `window.TEXT_MODEL_ENDPOINT` to `http://127.0.0.1:8787/qa` (or your deployed endpoint).
+1. Open `index.html` in a modern browser.  
+2. Click **Select Image** and choose an image.  
+3. Click **Analyze Image** to run the model.  
+4. View the predictions and the information panel.
+
+### Enabling the Q&A assistant (optional)
+
+1. Run `npm install` in the project root.  
+2. Create `server/.env` from the example file and set `GROQ_API_KEY`.  
+3. Start the backend with `npm run start:server` (default: `http://127.0.0.1:8787`).  
+4. In `index.html`, set `window.TEXT_MODEL_ENDPOINT` to `http://127.0.0.1:8787/qa` or your deployment URL.
 
 ## Privacy
 
-All image recognition runs entirely in your browser. When the Q&A assistant is enabled, only your text questions and minimal context are sent to the backend; images are not uploaded.
+Image recognition works fully in your browser. If you enable the Q&A feature, only your text question and a small context snippet are sent to the backend—images are never uploaded.
 
 ## Browser Compatibility
 
-Works best in modern browsers with WebGL enabled (Chrome, Firefox, Edge).
+Works best on modern browsers with WebGL enabled (Chrome, Firefox, Edge).
 
 ## License
 

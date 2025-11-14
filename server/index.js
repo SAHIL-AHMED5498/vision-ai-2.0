@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 
-const PORT = process.env.PORT || 8787;
+const PORT = process.env.PORT || 8788;
 const GROQ_API_KEY = process.env.GROQ_API_KEY || process.env.GROQ_AI_API_KEY; // set in server/.env
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
