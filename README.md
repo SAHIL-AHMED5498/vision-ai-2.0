@@ -5,7 +5,7 @@ A simple, privacy-friendly image recognition app built with TensorFlow.js and th
 ## Screenshots
 
 ### Desktop view
-
+![Image Recognition Web App - Main screen](images/first-image.png)
 ![Image Recognition Web App - Main screen](images/Screenshot%20(185).png)
 
 ### Prediction & Q&A panel
